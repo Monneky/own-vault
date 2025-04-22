@@ -27,9 +27,13 @@ const Register = () => {
             setEmail('');
             setName('');
             setPassword('');
-        }catch(err: any) {
-            if(err.response && err.response.data?.message) {
-                setError(err.response.data.message);
+        }catch(err) {
+            if(axios.isAxiosError(err)) {
+                if(err.response && err.response.data?.message) {
+                    setError(err.response.data.message);
+                }else {
+                    setError('Ocurrió un error al registrar el usuario');
+                }
             }else {
                 setError('Ocurrió un error al registrar el usuario');
             }
