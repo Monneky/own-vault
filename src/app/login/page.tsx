@@ -4,19 +4,53 @@ import { Input } from "@/components/ui/input";
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link';
+import axios from 'axios';
+import { useRouter } from 'next/router';
 
 const LoginPage = () => {
+    const router = useRouter();
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState(false);
 
     const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
-        console.log('Login attempt:', { email, password })
+        setError('');
+        setSuccess(false);
+        try{
+            const res = await axios.post('/api/login', {
+                email,
+                password
+            });
+            if(res.status === 200){
+                setSuccess(true);
+                setEmail('');
+                setPassword('');
+                router.push('/');
+            }
+        }catch(err){
+            if(axios.isAxiosError(err)){
+                if(err.response && err.response.data?.message){
+                    setError(err.response.data.message);
+                }else{
+                    setError('Ocurrió un error al iniciar sesión');
+                }
+            }else {
+                setError('Ocurrió un error al iniciar sesión');
+            }
+        }
     }
 
     return (
         <main className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
             <form className='w-full max-w-md space-y-6 bg-white p-8 rounded-2xl shadow-xl border border-slate-200'>
+                {error && (
+                    <p className='text-sm text-red-500 text-center'>{error}</p>
+                )}
+                {success && (
+                    <p className='text-sm text-green-500 text-center'>Inicio de sesion exitoso ✅</p>
+                )}
                 <div className='text-center'>
                     <h2 className='text-3xl font-bold text-slate-800'>Inicia Sesion</h2>
                     <p className='text-sm text-slate-500 mt-1'>

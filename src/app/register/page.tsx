@@ -5,8 +5,10 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import axios from 'axios';
+import { useRouter } from 'next/router';
 
 const Register = () => {
+    const router = useRouter();
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
@@ -27,6 +29,7 @@ const Register = () => {
             setEmail('');
             setName('');
             setPassword('');
+            router.push('/login');
         }catch(err) {
             if(axios.isAxiosError(err)) {
                 if(err.response && err.response.data?.message) {
