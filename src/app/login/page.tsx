@@ -5,8 +5,7 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link';
 import axios from 'axios';
-import { useRouter } from 'next/router';
-
+import { useRouter } from 'next/navigation';
 const LoginPage = () => {
     const router = useRouter();
     const [email, setEmail] = useState('')
