@@ -19,12 +19,15 @@ export async function POST(request: NextRequest) {
                 { status: 409 }
             );
         }
+        const totalUser = await prisma.user.count();
+
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = await prisma.user.create({
             data: {
                 email,
                 name,
                 password: hashedPassword,
+                role: totalUser === 0 ? "admin" : "user",
             },
         });
         return NextResponse.json({
